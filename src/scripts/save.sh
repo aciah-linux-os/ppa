@@ -3,9 +3,9 @@
 #!/bin/bash
 
 # Version 1.2 - juin 2024
-# Auteur : Aciah-octobre 2023
+# Auteur : Aciah
 # Licence : GPL v3
-# Modifications : Association ACIAH et Gérard Ruau (membre association ACIAH) 02/06/2024
+# Modifications : Association ACIAH et Gérard Ruau (membre association ACIAH) - 2 juin 2024
 # NAME : save.sh
 # DESCRIPTION : Ce script essaie de simplifier l'enregistrement de documents LibreOffice.
 # RACCOURCI : Ce script est placé dans le dossier /usr/local/bin
