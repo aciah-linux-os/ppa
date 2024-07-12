@@ -13,7 +13,7 @@
 #  xterm -e "tail -f /var/log/aciah/dezip.log" &
 
 aplay /usr/local/share/advl/beep.wav
-
+mkdir $HOME/Dossier-dezip
 FILE="$1"
 Y="$(pwd)"
 mkdir $HOME/Dossier-dezip
