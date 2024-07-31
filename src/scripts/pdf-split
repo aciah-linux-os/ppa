@@ -1,0 +1,12 @@
+#!/bin/bash
+# Nom:          PDF-split
+# Auteur:       (c) association Aciah
+# VERSION:      0.1  à  copier dans /usr/local/bin
+# LICENCE:      GNU GPL v3 (http://www.gnu.org/licenses/gpl.html)
+# Dépendances :  il faut avoir installé pdftk ....... sudo apt install pdftk
+# Description:  PDF-split est un outil d'extraction des pages d'un document pdf, en utilisant pdftk
+#            
+
+Document="$1"
+pdftk   "$Document" burst output "${Document%.pdf}-page%d.pdf"
+exit 0
