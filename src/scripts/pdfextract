@@ -1,0 +1,190 @@
+#!/bin/bash
+# Titre:        PDFextract
+# Auteur:       (c) CL
+# Version:      0.3
+# LICENCE:      GNU GPL v3 (http://www.gnu.org/licenses/gpl.html)
+# Modification :  Aciah - août 2024
+# Description:  PDFextract est un script permettant l'extraction de quelques pages d'un document PDF.
+#               - script en mode graphique qui préserve tous les attributs du document original et ne compresse pas les images s'il y en a 
+#               - il utilise qpdf qu'il ne faut pas oublier d'installer  ......>  sudo apt install qpdf
+#
+# Dépendances:  qpdf poppler-utils yad libnotify-bin
+#              #
+#  Ce script a été inspiré par  Kurt Pfeifle's PDF extraction script 
+# (http://www.linuxjournal.com/content/tech-tip-extract-pages-pdf)
+#
+
+
+
+# Variables
+
+DOCUMENT="$1"
+BACKENDSELECTION="^qpdf"
+
+
+# Fonctions
+
+check_input(){
+  if [[ -z "$1" ]]; then
+    #[ "$scr" = "1" ] && espeak -v $TYPE -s $SPEED -p $PITCH "Erreur: Aucun fichier sélectionné." | mbrola $VOIX - -.au | aplay &
+    notify "Erreur: Aucun fichier sélectionné."
+    exit 1
+  elif [[ ! "$(file -ib "$1")" == *application/pdf* ]]; then
+    #[ "$scr" = "1" ] && espeak -v $TYPE -s $SPEED -p $PITCH "Erreur: Ce n'est pas un fichier PDF valide." | mbrola $VOIX - -.au | aplay &
+    notify "Erreur: Ce n'est pas un fichier PDF valide."
+    exit 1
+  fi
+}
+
+check_deps () {
+  for i in "$@"; do
+    type "$i" > /dev/null 2>&1 
+    if [[ "$?" != "0" ]]; then
+      MissingDeps+="$i"
+    fi
+  done
+}
+
+qpdfextract(){
+  qpdf --linearize "$DOCUMENT" --pages "$DOCUMENT" "$STARTPAGE-$STOPPAGE" -- "$OUTFILE"
+  echo "$OUTFILE"
+  return 0 
+}
+
+notify(){
+  echo "$1"
+  stopmbrola
+  [ "$scr" = "1" ] && espeak -v $TYPE -s $SPEED -p $PITCH "PDFextract /$1/." | mbrola $VOIX - -.au | aplay &
+  notify-send -i application-pdf "PDFextract" "$1"
+  sleep 5
+}
+
+dialog_warning(){
+  echo "$1"
+  [ "$scr" = "1" ] && yad_say "Alerte/. /$1/." && sleep 2
+  yad --center --image dialog-warning \
+  --title "PDFExtract Alerte" \
+  --text "$1" \
+  --button="Nouvel essai:0" \
+  --button="Sortie:1"
+
+  [[ "$?" != "0" ]] && exit 0
+}
+
+#yad_say(){
+#  echo"$1"
+#  TVORCA=$(echo "`sed -n -e 100p /etc/speech-dispatcher/speechd.conf`" | cut -d '"' -f2)
+#  [ "$TVORCA" = "MALE1" ] && espeak -v mb/mb-fr1 -s $SPEED -p $PITCH " /$1/." | mbrola /usr/share/mbrola/fr1/fr1 - -.au | aplay
+#  [ "$TVORCA" = "FEMALE1" ] && espeak -v mb/mb-fr4 -s $SPEED -p $PITCH " /$1/." | mbrola /usr/share/mbrola/fr4/fr4 - -.au | aplay
+  
+#}
+
+#yad_say(){
+# echo"$1"
+# let V=(SPEED-80)*150/240-50
+# spd-say -r $V " /$1/."
+# 
+#}
+
+stopmbrola(){
+  if [ -n "$(ps -A | grep mbrola)" ] ; then
+	killall -KILL mbrola && sleep 2
+  fi
+
+}
+
+dialog_settings(){
+  PAGECOUNT=$(pdfinfo "$DOCUMENT" | grep Pages | sed 's/[^0-9]*//') #détermine le nombre de pages
+  
+  notify "S.V.P, choisissez les pages à extraire"
+  [ "$scr" = "1" ] && yad_say "S.V.P, choisissez les pages à extraire" && sleep 5
+  SETTINGS=($(\
+      yad --form --width 400 --center \
+          --window-icon application-pdf --image application-pdf \
+          --separator=" " --title="PDFextract"\
+          --text "S.V.P, choisissez les pages à extraire"\
+          --field="Début:NUM" 1[!1..$PAGECOUNT[!1]] --field="Fin:NUM" $PAGECOUNT[!1..$PAGECOUNT[!1]] \
+          --field="Mode":CB "$BACKENDSELECTION" \
+          --button="gtk-ok:0" --button="gtk-cancel:1"\
+      ))
+
+  SETTINGSRET="$?"
+
+  [[ "$SETTINGSRET" != "0" ]] && exit 1
+
+  STARTPAGE=$(printf %.0f ${SETTINGS[0]}) #Stockage dans les variables
+  STOPPAGE=$(printf %.0f ${SETTINGS[1]})
+  BACKEND="${SETTINGS[2]}"
+  EXTRACTOR="${BACKEND}extract"
+
+  check_deps "$BACKEND"
+
+  if [[ -n "$MissingDeps" ]]; then
+    dialog_warning "Erreur, dépendances manquantes : $MissingDeps"
+    unset MissingDeps
+    dialog_settings
+    return
+  fi
+
+  if [[ "$STARTPAGE" -gt "$STOPPAGE" ]]; then 
+    dialog_warning "<b>   n° page début supérieur à n° page fin.   </b>"
+    dialog_settings
+    return
+  fi
+
+  OUTFILE="${DOCUMENT%.pdf} (p${STARTPAGE}-p${STOPPAGE}).pdf"
+}
+
+extract_pages(){
+  $EXTRACTOR
+  EXTRACTORRET="$?"
+  if [[ "$EXTRACTORRET" = "0" ]]; then
+    #[ "$scr" = "1" ] && espeak -v $TYPE -s $SPEED -p $PITCH "Pages /$STARTPAGE/ à /$STOPPAGE/ extraites avec succès." | mbrola $VOIX - -.au | aplay &
+    notify "Pages $STARTPAGE à $STOPPAGE extraites avec succès."
+    sleep 3
+  else
+    #[ "$scr" = "1" ] && espeak -v $TYPE -s $SPEED -p $PITCH "Il y a eu une erreur. S.V.P, vérifiez en mode ligne de commande." | mbrola $VOIX - -.au | aplay &
+    notify "Il y a eu une erreur. S.V.P, vérifiez en mode ligne de commande."
+    sleep 3
+    fi
+}
+
+
+
+# Main
+
+##### test et creation dossier ConfigVoix et des fichiers de configuraions #####
+
+if [ ! -d $HOME/.local/ConfigVoix/ ] ; then
+     mkdir $HOME/.local/ConfigVoix
+     # Voix feminine
+     TYPE_VOIX=/usr/share/mbrola/fr4/fr4 
+     TYPE_V=mb/mb-fr4 
+     # Voix masculine
+     #TYPE_VOIX=/usr/share/mbrola/fr1/fr1
+     #TYPE_V=mb/mb-fr1
+     SPEED_V="160"
+     PITCH_V="50"
+     echo $TYPE_VOIX > $HOME/.local/ConfigVoix/voix.conf
+     echo $TYPE_V > $HOME/.local/ConfigVoix/type.conf
+     echo $SPEED_V > $HOME/.local/ConfigVoix/speed.conf
+     echo $PITCH_V > $HOME/.local/ConfigVoix/pitch.conf
+fi
+
+##### choix du type de voix à utiliser #####
+
+VOIX=$(cat $HOME/.local/ConfigVoix/voix.conf)
+TYPE=$(cat $HOME/.local/ConfigVoix/type.conf)
+SPEED=$(cat $HOME/.local/ConfigVoix/speed.conf)
+PITCH=$(cat $HOME/.local/ConfigVoix/pitch.conf)
+
+
+if pgrep "orca" > /dev/null; then
+    scr=1
+else
+    scr=0
+fi
+
+check_input "$1"
+dialog_settings
+extract_pages
