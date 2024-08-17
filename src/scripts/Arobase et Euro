@@ -5,6 +5,7 @@ Cela intéresse en particulier les personnes âgées malhabiles avec les raccour
 
 # !/bin/bash
 # faire un arobase
+sleep 0.5
 xdotool key 'at'
 exit 0;
 
@@ -13,5 +14,6 @@ exit 0;
 
 #!/bin/bash
 #faire le signe euro
+sleep 0.5
 xdotool key 'EuroSign'
 exit 0;
