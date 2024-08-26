@@ -1,0 +1,70 @@
+# Nous vous proposons deux scripts,en utilisant perplexity.ai
+# Ces deux scripts ont été faits pour les personnes handicapées qui ne voient pas l'cran ou ne peuvent pas cliquer sur un bouton.
+# Le pemier alt+p.sh permet d'entendre la réponse à la qestion posée à perplexity.
+# Le deuxième ai.sh copie la réponse dans un fichier nommé réponse.txt
+
+# il faut disposer du paquet xclip ...............sudo apt install xclip
+# et de l'extension "Read aloud" de Firefox.
+# Quand ces scripts sont copiés dans /usr/local/bin, il faut modifier le Aciah-menu.
+# Ainsi, avec la touche Coeur et en frappant ensuite la touche P, on entend la lecture de la réponse.
+# Avec la touche Coeur et en frappant ensuite la touche Z, on dispose du texte de la réponse, sous la forme reponse.txt
+
+# Voici le script : alt.p.sh
+
+#!/bin/sh
+sleep 0.5
+xdotool key "Alt+p"
+exit 0
+
+
+
+# Et voici le script : ai.sh
+
+#### Début du script
+	aplay /usr/local/share/advl/beep.wav
+	sleep 5
+
+#### Arrêt de la synthèse vocale Orca et le script se poursuit
+if [ -n "$(ps -A | grep mbrola)" ] ; then
+	killall -KILL mbrola && sleep 2
+fi
+
+#### Les indications sont données au début du script car elles se superposent à Orca si elles sont placées à la fin
+	espeak -a 200 -v mb-fr1 -s 130 "le fichier sera enregistré sous le nom ré ponse.txt"
+	sleep 1
+	espeak -a 200 -v mb-fr1 -s 130 "le fichier ré ponse sera ouvert"	
+	sleep 1
+
+#### Si le dossier $HOME/A-ai n'existe pas, on le crée
+    if [ ! -d $HOME/A-ai ]
+        then
+            mkdir $HOME/A-ai
+    fi
+
+amixer -q  -D pulse sset Master toggle
+
+#### Commandes pour aller dans le dossier 'A-ai'
+	xdotool key Shift+Tab
+	sleep 1
+	xdotool key Shift+Tab
+	sleep 1
+	xdotool key Shift+Tab
+    sleep 1
+    xdotool key Shift+Tab
+	sleep 1
+	xdotool key Return
+	sleep 1
+    xdotool getactivewindow getwindowname
+    sleep 1
+
+    xclip -o -selection clipboard > $HOME/A-ai/reponse.txt
+	sleep 1
+
+amixer -q  -D pulse sset Master toggle
+mousepad $HOME/A-ai/reponse.txt
+
+#### Ré-active la synthèse vocale Orca
+speech-dispatcher
+orca --replace &
+
+	exit 0
