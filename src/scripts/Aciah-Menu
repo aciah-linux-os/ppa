@@ -80,7 +80,7 @@ cmd = google-chrome-stable https://www.textfromtospeech.com/fr/voice-to-text/
 icon = 
 
 item = Petite loupe non cliquable - ou CTRL + Espace
-cmd = vmg
+cmd = bash -c 'pkill vmg ; vmg'
 icon = 
 
 SEPARATOR
