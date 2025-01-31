@@ -32,14 +32,14 @@ $(PACKAGE)-$(VERSION).tar.gz: src/scripts/*.sh VERSION debian/* Makefile
 
 package: $(deb_files)
 $(deb_files): $(PACKAGE)-$(VERSION).tar.gz
-	# Build docker image
-	docker build -t aciah_ppa -f docker/Dockerfile .
+	# Build the container image
+	podman build -t aciah_ppa -f docker/Dockerfile .
 	# Package in a container
 	mkdir -p ./ppa
-	docker run --rm \
-	    -v "./$(PACKAGE)-$(VERSION).tar.gz:/orig/$(PACKAGE)-$(VERSION).tar.gz" \
-	    -v ./ppa:/ppa \
-	    -v ./key.asc:/key.asc \
+	podman run --rm \
+	    -v "./$(PACKAGE)-$(VERSION).tar.gz:/orig/$(PACKAGE)-$(VERSION).tar.gz":z \
+	    -v ./ppa:/ppa:z \
+	    -v ./key.asc:/key.asc:z \
 	    -e PACKAGE="$(PACKAGE)" \
 	    -e VERSION="$(VERSION)" \
 	    aciah_ppa
