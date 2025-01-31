@@ -10,4 +10,11 @@ sudo apt install aciah
 ```
 
 ## Build
-See Makefile
+1. Modify the sources in the `src/scripts` directory.
+2. Change the version in `VERSION`.
+3. Add the latest section on top of the `debian/changelog` file.
+4. Decrypt the package signing key: `make decrypt-key`.
+5. Build the archive (just a compressed tarball of the sources) `make archive`.
+6. Build the package `make package`. The files in the `ppa/` directories are updated by the script.
+7. Commit and push these updated files, add the newly created .deb file. Push to the remote repository.
+
