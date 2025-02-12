@@ -17,7 +17,7 @@ On peut régler le clavier pour lancer ce script avec la touche F8.
 # Modifications : association ACIAH et Pierre Estrem avril 2024, Gérard Ruau (membre association ACIAH) 13/05/2024
 # NAME : Lecture à la volée
 # DESCRIPTION : Script permettant la lecture en direct de fichiers images jpg, png, tif, pdf, doc, docx, txt.
-# Dépendances : espeak, unoconv, pandoc, player.py et notre script conv-txt.sh
+# Dépendances : espeak, unoconv, pandoc, player.py, python3-tk et notre script conv-txt.sh
 #               !!!! unoconv génere une alerte car il est déprécié par Python et sera supprimé dans la version 3.12 !!!!
 # RACCOURCIS : ce script est placé dans le dossier $HOME/.config/caja/scripts
 # et est appelé par le raccourci : F8
