@@ -5,6 +5,7 @@ le texte : notamment la vitesse de lecture.
 # Auteur : Pierre Estrem février 2024
 # script pour lire à haute voix les documents txt obtenus avec le script A-lire-et-obtenir-le-texte
 # nécessite le fichier help.txt - voir ligne 46 et la ligne 332.
+# nécessite l'installation du paquet python3-tk
 """
 Lecteur de fichier texte avec les fonctions :
 	- lecture accélérée (Flèche HAUT)
