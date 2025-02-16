@@ -1,4 +1,4 @@
-bin/bash
+# !/bin/bash
 # script pour faire : Alt + Origine, en lui affectant une seule touche du clavier
 # nécessite le paquet : xdotool
 # licence GPL v3
