@@ -1,3 +1,8 @@
+aciah (0.4.0-3) UNRELEASED; urgency=low
+  * Fix (further) post install script
+
+ -- Max <aciah.brisket506@simplelogin.com>  mer. 16 avril 2025 18:21:22 CEST
+
 aciah (0.4.0-2) UNRELEASED; urgency=low
   * Fix post install script
 

@@ -5,8 +5,11 @@ set -e
 echo "Running post install script for ACIAH..."
 
 echo "Setting up keyboard shortcuts."
-xfconf-query --channel xfce4-keyboard-shortcuts --property "/commands/custom/F1" --create --type string --set aciah_ouvrir_menu_fichier
-xfconf-query --channel xfce4-keyboard-shortcuts --property "/commands/custom/F4" --create --type string --set aciah_fermer_fenetre_active
+users=$(cut -d: -f1,3 /etc/passwd | grep -E ':[0-9]{4}$' | cut -d: -f1)
+for user in $users; do
+    sudo -u $user xfconf-query --channel xfce4-keyboard-shortcuts --property "/commands/custom/F1" --create --type string --set aciah_ouvrir_menu_fichier
+    sudo -u $user xfconf-query --channel xfce4-keyboard-shortcuts --property "/commands/custom/F4" --create --type string --set aciah_fermer_fenetre_active
+done
 
 echo "Done."
 exit 0
