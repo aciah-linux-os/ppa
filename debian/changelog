@@ -1,7 +1,12 @@
+aciah (0.4.0-2) UNRELEASED; urgency=low
+  * Fix post install script
+
+ -- Max <aciah.brisket506@simplelogin.com>  mer. 16 avril 2025 17:54:12 CEST
+
 aciah (0.4.0-1) UNRELEASED; urgency=low
   * Add post install script to setup keyboards shortcuts
 
- -- Max <aciah.brisket506@simplelogin.com>  Fri, 12 Apr 2024 15:50:06+0000
+ -- Max <aciah.brisket506@simplelogin.com>  mer. 16 avril 2025 17:54:12 CEST
 
 aciah (0.3.0-1) UNRELEASED; urgency=low
   * Add more scripts from ACIAH

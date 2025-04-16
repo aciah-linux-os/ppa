@@ -37,16 +37,16 @@ Description: auto-generated package by debmake
  debmake(1) command provided by the debmake package.
 
 Package: aciah
-Version: 0.4.0-1
+Version: 0.4.0-2
 Architecture: amd64
 Maintainer: Max <aciah.brisket506@simplelogin.com>
 Installed-Size: 60
 Depends: xdotool, poppler-utils, espeak, procps, alsa-utils
-Filename: ./aciah_0.4.0-1_amd64.deb
-Size: 14768
-MD5sum: 530dd77b0355122413d51b74a0c4440b
-SHA1: aa39d8b9a124538a79fb8d2d92c13332aa6ec17d
-SHA256: ae06023f3e139d2d04a36442f4a1256b75a0a13fb01bf7402e005ddaa74d1dee
+Filename: ./aciah_0.4.0-2_amd64.deb
+Size: 14812
+MD5sum: 360e2f7148f6ead825c8eb9b39652f3b
+SHA1: 38c2fa982eba03e5530a3b3dd1e8fd4cda6358f6
+SHA256: 3ebb6220974cc490c1ebc271ca1fa8c1fb8725a21e6eb661d27d80b6d92dc978
 Section: unknown
 Priority: optional
 Multi-Arch: foreign
