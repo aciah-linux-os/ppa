@@ -5,8 +5,8 @@ set -e
 echo "Running post install script for ACIAH..."
 
 echo "Setting up keyboard shortcuts."
-xfconf-query --channel xfce4-keyboard-shortcuts --property "/commands/custom/F1" --type string --set aciah_ouvrir_menu_fichier
-xfconf-query --channel xfce4-keyboard-shortcuts --property "/commands/custom/F4" --type string --set aciah_fermer_fenetre_active
+xfconf-query --channel xfce4-keyboard-shortcuts --property "/commands/custom/F1" --create --type string --set aciah_ouvrir_menu_fichier
+xfconf-query --channel xfce4-keyboard-shortcuts --property "/commands/custom/F4" --create --type string --set aciah_fermer_fenetre_active
 
 echo "Done."
 exit 0
