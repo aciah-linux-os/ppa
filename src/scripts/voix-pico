@@ -2,4 +2,4 @@ un script permettant d'installer la voix "pico" sur Aciah-Linux :
 https://aciah-linux.org/Telecharger/saverestinst_AL-21.3.run
 
 Quand l'installation est faite, lancer un terminal puis écrire : orca  -s
-Aller dns l'onglet "Voix" et faire apparaître "pico"  dans la ligne : speech-dispatcher
+Aller dans l'onglet "Voix" et faire apparaître "pico"  dans la ligne : speech-dispatcher
