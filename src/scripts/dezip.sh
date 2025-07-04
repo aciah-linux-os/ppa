@@ -4,21 +4,23 @@
 # Licence : GPL V3
 # Modifications : Gérard Ruau (membre association ACIAH), 12 mai 2024
 # NAME : dezip.sh 
-# DESCRIPTION : script pour décompresser en utilisant une seule touche
+# DESCRIPTION : script pour décompresser une archive en utilisant une seule touche
 # RACCOURCIS : ce script est placé dans le dossier $HOME/.config/caja/scripts
-# et est appelé par le raccourci : F10 dans Caja et F12 dans Thunar (problème raxxourcis GTK !)
-
-# Décommenter les deux lignes suivantes pour récupérer les log du script et les afficher en direct dans un terminal
-#  exec 1>>/var/log/aciah/dezip.log 2>>/var/log/aciah/dezip.log
-#  xterm -e "tail -f /var/log/aciah/dezip.log" &
+# et est appelé par le raccourci : F10 dans Caja et F12 dans Thunar (problème raccourcis GTK !)
 
 aplay /usr/local/share/advl/beep.wav
-mkdir $HOME/Dossier-dezip
-FILE="$1"
+
+# Créer le Dossier-dezip
+File="$1"
 Y="$(pwd)"
 mkdir $HOME/Dossier-dezip
 
-cp "$FILE" $HOME/Dossier-dezip
+# copier l'archive dans le Dossier-dezip et remplacer les espaces par des underscores
+
+cp "$File" $HOME/Dossier-dezip
+
+for file in *; do mv "$file" "${file// /_}"; done
+sleep 1
 
 ZIPDIR=$HOME/Dossier-dezip
 TMP=/tmp/zipfiles
@@ -70,7 +72,7 @@ EXTENSION="${FILENAME##*.}"
                         done
                 ;;
                 
-                #####pour les fichiers non gérés ci-dessus : ouverture du gestionnaire d'archives => fonctionne mieux avec xarchiver
+                ##### pour les fichiers non gérés ci-dessus : ouverture du gestionnaire d'archives => fonctionne mieux avec xarchiver
                 *)
                     xarchiver --extract-to="$ZIPDIR" "$1"
                     #      file-roller "$1"
@@ -94,6 +96,7 @@ caja  $HOME/Dossier-dezip
 
 #############################################################################################
 #########################################################################################
+attention, version obsolète
 
 #!/bin/bash
 # script pour décompresser une archive. Version obsolète
