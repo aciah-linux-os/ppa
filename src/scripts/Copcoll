@@ -1,0 +1,176 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""
+Auteur :      thuban (2016)
+licence :     GNU General Public Licence v3
+Modification : ACIAH juillet 2025, adaptation à python3
+
+Description : Permet de copier rapidement des morceaux de texte prédéfinis
+Dépendances : python3-gi, gir1.2-gtk-3.0
+"""
+
+import os
+import configparser
+import gi
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk, Gdk, GObject
+
+name = "copcoll"
+config = os.path.expanduser("~/.copcoll")
+w, h = 0, 400  # largeur et hauteur
+
+class Copcoll:
+    def close_application(self, widget, event, data=None):
+        Gtk.main_quit()
+
+    def set_clipboard(self, button, txt):
+        clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+        clipboard.set_text(txt, -1)
+
+    def add_to_config(self, button, titleentry, racentry, section, dialog):
+        title = titleentry.get_text().strip()
+        buf = racentry.get_buffer()
+        start, end = buf.get_bounds()
+        txt = buf.get_text(start, end, True)
+        if txt != "" and title != "":
+            if not self.conf.has_section(section):
+                self.conf.add_section(section)
+            self.conf.set(section, title, txt)
+            dialog.destroy()
+            self.reload()
+
+    def delete_option(self, button, section, option):
+        self.conf.remove_option(section, option)
+        self.reload()
+
+    def add_new_section(self, widget):
+        name = widget.get_text().strip()
+        if len(name) != 0 and not self.conf.has_section(name):
+            self.conf.add_section(name)
+            self.reload()
+
+    def reload(self):
+        with open(config, 'w', encoding='utf-8') as configfile:
+            self.conf.write(configfile)
+        self.window.destroy()
+        self.build_win()
+        self.window.show_all()
+
+    def add_new(self, widget, section):
+        d = Gtk.Dialog(title="Ajouter un raccourci", transient_for=self.window, flags=0)
+        d.set_default_size(100, 100)
+
+        box = d.get_content_area()
+        grid = Gtk.Grid(column_spacing=5, row_spacing=2, margin=0)
+        box.add(grid)
+
+        titlelbl = Gtk.Label(label="Titre")
+        titleentry = Gtk.Entry()
+        raclbl = Gtk.Label(label="Nouveau texte")
+        racentry = Gtk.TextView()
+        racentry.set_size_request(150, -1)
+
+        grid.attach(titlelbl, 0, 0, 1, 1)
+        grid.attach(titleentry, 1, 0, 1, 1)
+        grid.attach(raclbl, 0, 1, 1, 1)
+        grid.attach(racentry, 1, 1, 1, 1)
+
+        addbtn = Gtk.Button(label="Ajouter")
+        addbtn.connect("clicked", self.add_to_config, titleentry, racentry, section, d)
+        grid.attach(addbtn, 0, 2, 2, 1)
+
+        d.show_all()
+        d.run()
+        d.destroy()
+
+    def show_sentences(self):
+        self.section_list = Gtk.Notebook()
+        self.section_list.set_tab_pos(Gtk.PositionType.LEFT)
+        self.section_list.set_scrollable(True)
+
+        for s in self.conf.sections():
+            bigbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=2)
+            scrolled_window = Gtk.ScrolledWindow()
+            scrolled_window.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
+            scrolled_window.add(bigbox)
+            scrolled_window.set_size_request(w, -1)
+
+            self.section_list.append_page(scrolled_window, Gtk.Label(label=s))
+            for o in self.conf.options(s):
+                box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=7)
+                l = Gtk.Label(label=o)
+                box.pack_start(l, True, True, 10)
+
+                bbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+                copy = Gtk.Button.new_from_icon_name("edit-copy", Gtk.IconSize.BUTTON)
+                copy.connect('clicked', self.set_clipboard, self.conf.get(s, o))
+
+                delbtn = Gtk.Button.new_from_icon_name("user-trash", Gtk.IconSize.BUTTON)
+                delbtn.connect('clicked', self.delete_option, s, o)
+                bbox.pack_start(copy, False, False, 0)
+                bbox.pack_start(delbtn, False, False, 0)
+
+                box.pack_start(bbox, False, False, 0)
+                bigbox.pack_start(box, False, False, 0)
+
+            addbtn = Gtk.Button.new_from_icon_name("list-add", Gtk.IconSize.BUTTON)
+            addbtn.connect("clicked", self.add_new, s)
+            bigbox.pack_start(addbtn, False, False, 5)
+
+        # pour ajouter des catégories (= sections)
+        addbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10, margin=10)
+        instruction = Gtk.Label(label="Nom de la nouvelle catégorie:")
+        entry = Gtk.Entry()
+        entry.connect("activate", self.add_new_section)
+        addbox.pack_start(instruction, False, True, 3)
+        addbox.pack_start(entry, False, False, 20)
+
+        addbtn = Gtk.Button.new_from_icon_name("list-add", Gtk.IconSize.BUTTON)
+        addbtn.connect("clicked", self.add_new_section, entry)
+        addbox.pack_start(addbtn, False, False, 10)
+
+        addlabel = Gtk.Image.new_from_icon_name("list-add", Gtk.IconSize.MENU)
+        self.section_list.append_page(addbox, addlabel)
+
+        self.mainbox.pack_start(self.section_list, True, True, 0)
+
+    def build_win(self):
+        self.conf = configparser.ConfigParser()
+        if os.path.isfile(config):
+            self.conf.read(config, encoding='utf-8')
+        else:
+            self.conf.add_section('Catégories')
+
+        self.mainbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
+        self.show_sentences()
+
+        self.window = Gtk.Window(title=name)
+        self.window.connect("delete-event", self.close_application)
+        self.window.set_default_size(-1, h)
+        self.window.add(self.mainbox)
+
+    def trayclic(self, widget):
+        if self.window.get_skip_taskbar_hint():
+            self.window.deiconify()
+            self.window.set_skip_taskbar_hint(False)
+        else:
+            self.window.iconify()
+            self.window.set_skip_taskbar_hint(True)
+
+    def __init__(self):
+        # Le support du tray icon a changé avec GTK3, il faut utiliser AppIndicator ou Gtk.StatusIcon (obsolète)
+        # Voici un exemple avec StatusIcon, mais il peut ne pas fonctionner selon l'environnement
+        self.trayicon = Gtk.StatusIcon.new_from_icon_name("accessories-text-editor")
+        self.trayicon.set_visible(True)
+        self.trayicon.connect("activate", self.trayclic)
+        self.build_win()
+        self.window.show_all()
+
+def main():
+    copcoll = Copcoll()
+    Gtk.main()
+    return 0
+
+if __name__ == '__main__':
+    main()
