@@ -2,136 +2,80 @@
 # # VERSION 2.0
 # AUTHOR : association ACIAH
 # Licence : GPL V3
-# Modifications : Gérard Ruau (membre association ACIAH), 12 mai 2024
+# Modifications : Gérard Ruau (membre association ACIAH), 12/05/2024
 # NAME : dezip.sh 
-# DESCRIPTION : script pour décompresser une archive en utilisant une seule touche
+# DESCRIPTION : script pour décompresser une archive en utilisant la touche F10
 # RACCOURCIS : ce script est placé dans le dossier $HOME/.config/caja/scripts
-# et est appelé par le raccourci : F10 dans Caja et F12 dans Thunar (problème raccourcis GTK !)
+# et est appelé par le raccourci : F10 dans Caja.
 
+# Émettre un bip sonore
 aplay /usr/local/share/advl/beep.wav
 
-# Créer le Dossier-dezip
-File="$1"
-Y="$(pwd)"
-mkdir $HOME/Dossier-dezip
+# Vérification de la présence d'un argument
+if [ -z "$1" ]; then
+    echo "Usage: $0 archive"
+    exit 1
+fi
 
-# copier l'archive dans le Dossier-dezip et remplacer les espaces par des underscores
+# Définition des variables
+FILE="$1"
+ZIPDIR="$HOME/Dossier-dezip"
 
-cp "$File" $HOME/Dossier-dezip
+# Création du dossier de destination s'il n'existe pas
+mkdir -p "$ZIPDIR"
 
-for file in *; do mv "$file" "${file// /_}"; done
-sleep 1
+# Copie de l'archive dans le dossier de destination
+cp "$FILE" "$ZIPDIR"
 
-ZIPDIR=$HOME/Dossier-dezip
-TMP=/tmp/zipfiles
+# Renommage des fichiers pour remplacer les espaces par des underscores
 cd "$ZIPDIR"
-rm tmp/zipfiles 2>/dev/null
-
-# Détermination de l'extension du fichier
-FILE_PATH="$FILE"
-FILENAME="$(basename $FILE_PATH)"
-EXTENSION="${FILENAME##*.}"
-
-#Extraction des fichiers en fonction des extensions
-    if [ ! -z $EXTENSION ]
-        then
-            case $EXTENSION in
-
-                #####pour les fichiers .zip
-                zip)
-                    for i in *.zip
-                        do
-                            DOSSIER=$(basename $FILE .zip)
-                            mkdir "$DOSSIER"
-                            unzip -o "$i" -d "$DOSSIER"
-                            rm "$ZIPDIR"/*.zip
-                        done
-                ;;
-                
-                #####pour les fichiers .tar.gz
-                gz)
-                    for f in *.tar.gz
-                        do
-                            DOSSIER=$(basename $FILE .gz)
-                            mkdir "$DOSSIER"
-                            tar zxvf "$f" -C  "$ZIPDIR"
-                            rm "$ZIPDIR"/*.tar.gz
-                            rmdir "$ZIPDIR"/*.tar
-                        done
-                ;;
-                    
-                #####pour les fichiers .tar.bz2
-                bz2)
-                   for k in *.tar.bz2
-                        do
-                            DOSSIER=$(basename $FILE .bz2)
-                            mkdir "$DOSSIER"
-                            tar jxvf "$k" -C  "$ZIPDIR"
-                            rm "$ZIPDIR"/*.tar.bz2
-                            rmdir "$ZIPDIR"/*.tar
-                        done
-                ;;
-                
-                ##### pour les fichiers non gérés ci-dessus : ouverture du gestionnaire d'archives => fonctionne mieux avec xarchiver
-                *)
-                    xarchiver --extract-to="$ZIPDIR" "$1"
-                    #      file-roller "$1"
-                    rm "$ZIPDIR"/"$FILENAME"
-                ;;
-
-            esac
-    fi
-
-sleep 3
-# on peut modifier la vitesse, le timbre de voix ainsi que le volume de espeak, voir espeak --help dans un terminal
-espeak -a 300 -v mb-fr1 -s 130 "le document ob tenu est dans le Dossier-dezip qui sera ouvert"
-aplay /usr/local/share/advl/beep.wav
-aplay /usr/local/share/advl/beep.wav
-caja  $HOME/Dossier-dezip
-
-
-
-
-
-
-#############################################################################################
-#########################################################################################
-attention, version obsolète
-
-#!/bin/bash
-# script pour décompresser une archive. Version obsolète
-# on peut régler le clavier pour lancer ce script avec la touche F10.
-
-aplay /usr/local/share/advl/beep.wav
-
-File="$1"
-Y="$(pwd)"
-mkdir $HOME/Dossier-dezip
-cp "$File" /home/aciah/Dossier-dezip       # si aciah est le nom du dossier personnel. Sinon remplace aciah par le user.
-
-ZIPDIR=$HOME/Dossier-dezip
-TMP=/tmp/zipfiles
-cd "$ZIPDIR"
-rm tmp/zipfiles 2>/dev/null
-
-for i in ./*.zip; do
-    dossier=${i::-4}
-    mkdir "$dossier"
-    unzip -o "$i" -d "$dossier" 
-    subdirs=$(find "$dossier" -type d -printf ".\n" | wc -l)
-    if [[ $subdirs -gt 1 ]]; then
-        mv ./$dossier/*/* ./$dossier/*
-    
-#    rm /home/aciah/Dossier-dezip/*.zip
-
+for file in *; do
+    if [[ "$file" == *" "* ]]; then
+        mv "$file" "${file// /_}"
     fi
 done
 
-sleep 5
-espeak -a 300 -v mb-fr1 -s 150 "le document ob tenu se trouve dans le Dossier-dezip"
+# Détermination de l'archive à traiter (après renommage)
+ARCHIVE=$(ls | grep -E '\.(zip|tar\.gz|tar\.bz2)$')
+FILENAME="$(basename "$ARCHIVE")"
+EXTENSION="${FILENAME##*.}"
 
-rm /home/aciah/Dossier-dezip/*.zip
+# Extraction selon l'extension
+case "$FILENAME" in
+    *.zip)
+        DOSSIER="${FILENAME%.zip}"
+        mkdir -p "$DOSSIER"
+        unzip -o "$FILENAME" -d "$DOSSIER"
+        rm -f "$FILENAME"
+        ;;
+    *.tar.gz)
+        DOSSIER="${FILENAME%.tar.gz}"
+        mkdir -p "$DOSSIER"
+        tar -xzf "$FILENAME" -C "$DOSSIER"
+        rm -f "$FILENAME"
+        ;;
+    *.tar.bz2)
+        DOSSIER="${FILENAME%.tar.bz2}"
+        mkdir -p "$DOSSIER"
+        tar -xjf "$FILENAME" -C "$DOSSIER"
+        rm -f "$FILENAME"
+        ;;
+    *)
+        # Pour les autres types, ouverture dans xarchiver
+        xarchiver --extract-to="$ZIPDIR" "$FILENAME"
+        rm -f "$FILENAME"
+        ;;
+esac
 
-caja  /home/aciah/Dossier-dezip
+sleep 3
 
+# Message vocal
+espeak -a 300 -v mb-fr1 -s 150 "le document ob tenu est dans le dossier dezip"
+espeak -a 300 -v mb-fr1 -s 150 "le dossier dezip va s'ouvrir"
 
+# Ouverture du dossier
+caja "$ZIPDIR"
+
+# Bip de fin
+aplay /usr/local/share/advl/beep.wav
+aplay /usr/local/share/advl/beep.wav
