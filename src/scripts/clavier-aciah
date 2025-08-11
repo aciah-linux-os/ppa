@@ -6,15 +6,15 @@
 # DESCRIPTION : Pour utiliser toutes les simplifications de ACIAH-Linux
 # DEPENDANCES : le script se lance avec Firefox ou un autre navigateur
 # COMPLEMENTS : on peut placer une icône sur le Bureau
-# RACCOURCIS :
+# RACCOURCIS 
 <!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8" />
-<title>Clavier AZERTY 105 touches - Aciah (touche Cœur)</title>
+<title>Clavier-ACIAH (touche Cœur)</title>
 <style>
   body { font-family: Arial, sans-serif; text-align: center; background-color: #000; color: #fff; }
-  textarea { width: 90%; height: 150px; font-size: 24px; margin: 10px auto; display: block; }
+  textarea { width: 90%; height: 100px; font-size: 24px; margin: 10px auto; display: block; }
   .keyboard { display: inline-block; text-align: center; }
   .key-row { display: flex; justify-content: center; margin: 3px 0; }
   .key {
@@ -25,7 +25,7 @@
     margin: 2px;
     border-radius: 6px;
     font-size: 20px;
-    min-width: 40px;
+    min-width: 20px;
     text-align: center;
     cursor: pointer;
     user-select: none;
@@ -38,7 +38,7 @@
     border-radius: 6px;
     font-size: 20px;
     font-weight:bold;
-    min-width: 40px;
+    min-width: 20px;
     text-align: center;
     cursor: pointer;
     user-select: none;
@@ -50,7 +50,7 @@
     margin: 2px;
     border-radius: 6px;
     font-size: 20px;
-    min-width: 40px;
+    min-width: 20px;
     text-align: center;
     cursor: pointer;
     user-select: none;
@@ -61,8 +61,7 @@
 </style>
 </head>
 <body>
-<h1>Clavier AZERTY 105 touches - Aciah (touche Cœur)</h1>
-<div> Les fonctions F1 - F4 - F6 - F8 - F9 - F10 - et F12 sont très importantes.</div>
+<h1>Clavier-ACIAH</h1>
 <textarea id="textArea" placeholder="Tapez sur votre clavier physique..."></textarea>
 <div class="keyboard">
   <!-- Rangée des touches de fonction -->
@@ -85,7 +84,7 @@
   </div>
   <!-- Ligne des chiffres -->
   <div class="key-row">
-    <div class="key2" onclick="addChar('@')">@</div>
+    <div class="key2 wide" onclick="addChar('@')">@</div>
     <div class="key" onclick="addChar('&')">&amp;</div>
     <div class="key" onclick="addChar('é')">é</div>
     <div class="key" onclick="addChar('\"')">"</div>
@@ -98,7 +97,10 @@
     <div class="key" onclick="addChar('à')">à</div>
     <div class="key" onclick="addChar(')')">)</div>
     <div class="key" onclick="addChar('=')">=</div>
-    <div class="key wide" onclick="pressKey('Backspace')">Retour Arr.</div>
+    <div class="key" onclick="pressKey('Backspace')">Retour Arr.</div>
+    <div class="key" style="margin-left:50px" onclick="addChar('')">Inser</div>
+    <div class="key" onclick="addChar('')">Origine</div>
+    <div class="key2" onclick="addChar('')">Alt+Origine</div>
   </div>
   <!-- Ligne des lettres AZERTY -->
   <div class="key-row">
@@ -115,7 +117,10 @@
     <div class="key" onclick="addChar('P')">P</div>
     <div class="key" onclick="addChar('^')">^</div>
     <div class="key" onclick="addChar('$')">$</div>
-    <div class="key wide" onclick="pressKey('Enter')">Entrée</div>
+    <div class="key3 wide" onclick="pressKey('Enter')">Entrée</div>
+    <div class="key" style="margin-left:55px" onclick="addChar('')">Suppr</div>
+    <div class="key" onclick="addChar('')">Fin</div>
+    <div class="key2" onclick="addChar('')">Focus/Navig.</div>
   </div>
   <!-- Rangée suivante -->
   <div class="key-row">
@@ -131,7 +136,7 @@
     <div class="key" onclick="addChar('L')">L</div>
     <div class="key" onclick="addChar('M')">M</div>
     <div class="key" onclick="addChar('ù')">ù</div>
-    <div class="key" onclick="addChar('*')">*</div>
+    <div class="key" style="margin-right:450px" onclick="addChar('*')">*</div>
   </div>
   <!-- Rangée suivante -->
   <div class="key-row">
@@ -144,10 +149,11 @@
     <div class="key" onclick="addChar('B')">B</div>
     <div class="key" onclick="addChar('N')">N</div>
     <div class="key" onclick="addChar(',')">,</div>
-    <div class="key" onclick="addChar(';')">;</div>
+    <div class="key" onclick="addChar('.')">.</div>
     <div class="key" onclick="addChar(':')">:</div>
     <div class="key" onclick="addChar('!')">!</div>
-    <div class="key wide" onclick="pressKey('Shift')">Shift</div>
+    <div class="key" style="margin-right:100px" onclick="pressKey('Shift')">Shift</div>
+    <div class="key" style="margin-left:100px" onclick="addChar('')">Haut</div>
   </div>
   <!-- Espace et modificateurs -->
   <div class="key-row">
@@ -157,21 +163,29 @@
     <div class="key extra-wide" onclick="addChar(' ')">Espace</div>
     <div class="key wide" onclick="addChar('AltGr')">AltGr</div>
     <div class="key wide" onclick="pressKey('Menu')">Menu</div>
-    <div class="key wide" onclick="pressKey('❤️')">❤️ coeur</div>
+    <div class="key3 wide" onclick="pressKey('❤️')">❤️ Coeur</div>
+    <div class="key" style="margin-left:170px" onclick="addChar('')"><--</div>
+    <div class="key" onclick="addChar('')">Bas</div>
+    <div class="key" onclick="addChar('')">--></div>
   </div>
   <!-- Pavé numérique -->
 <div> Pour lire avec Orca, on frappe la touche PLUS du pavé numérique désactivé</div>
   <div class="key-row" style="margin-top:20px;">
+    <div class="key2 wide" onclick="pressKey('NumLock')">Verr.num</div>
+    <div class="key" onclick="addChar('/')">/</div>
+    <div class="key" onclick="addChar('*')">*</div>
+    <div class="key" onclick="addChar('-')">Tiret</div>
+  </div>
+  <div class="key-row">
     <div class="key" onclick="addChar('7')">7</div>
     <div class="key" onclick="addChar('8')">8</div>
     <div class="key" onclick="addChar('9')">9</div>
-    <div class="key wide" onclick="pressKey('NumLock')">Verr.num</div>
   </div>
   <div class="key-row">
     <div class="key" onclick="addChar('4')">4</div>
     <div class="key" onclick="addChar('5')">5</div>
     <div class="key" onclick="addChar('6')">6</div>
-    <div class="key2 wide" onclick="pressKey('Plus')">Plus</div>
+    <div class="key2 wide" onclick="pressKey('+')">Plus</div>
   </div>
   <div class="key-row">
     <div class="key" onclick="addChar('1')">1</div>
