@@ -1,0 +1,254 @@
+# VERSION 1.0
+# Auteur : association ACIAH - août 2025
+# Licence : GPL - v3
+# Modifications :
+# Nom : clavier-ACIAH
+# DESCRIPTION : Pour utiliser toutes les simplifications de ACIAH-Linux
+# DEPENDANCES : le script se lance avec Firefox ou un autre navigateur
+# COMPLEMENTS : on peut placer une icône sur le Bureau
+# RACCOURCIS :
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<title>Clavier AZERTY 105 touches - Aciah (touche Cœur)</title>
+<style>
+  body { font-family: Arial, sans-serif; text-align: center; background-color: #000; color: #fff; }
+  textarea { width: 90%; height: 150px; font-size: 24px; margin: 10px auto; display: block; }
+  .keyboard { display: inline-block; text-align: center; }
+  .key-row { display: flex; justify-content: center; margin: 3px 0; }
+  .key {
+    background-color: #222;
+    color: #fff;
+    border: 1px solid #555;
+    padding: 10px 14px;
+    margin: 2px;
+    border-radius: 6px;
+    font-size: 20px;
+    min-width: 40px;
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+  }
+  .key2 {background-color: #222;
+    color: red;
+    border: 1px solid #555;
+    padding: 10px 14px;
+    margin: 2px;
+    border-radius: 6px;
+    font-size: 20px;
+    font-weight:bold;
+    min-width: 40px;
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+}
+  .key3 {background-color: lightgreen;
+    color: #000;
+    border: 1px solid #555;
+    padding: 10px 14px;
+    margin: 2px;
+    border-radius: 6px;
+    font-size: 20px;
+    min-width: 40px;
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+}
+  .key:hover { background-color: #555; }
+  .wide { min-width: 80px; }
+  .extra-wide { min-width: 120px; }
+</style>
+</head>
+<body>
+<h1>Clavier AZERTY 105 touches - Aciah (touche Cœur)</h1>
+<div> Les fonctions F1 - F4 - F6 - F8 - F9 - F10 - et F12 sont très importantes.</div>
+<textarea id="textArea" placeholder="Tapez sur votre clavier physique..."></textarea>
+<div class="keyboard">
+  <!-- Rangée des touches de fonction -->
+<div>F1 pour aller au menu Fichier - F4 pour fermer - F8 pour Lire et obtenir le texte - F9 pour le mode-lecture</div>
+<div>F10 pour décompresser une archive - F12 pour lire avec V.L.C.</div>
+  <div class="key-row">
+    <div class="key" onclick="pressKey('Escape')">Echap</div>
+    <div class="key" onclick="pressKey('F1')">F1</div>
+    <div class="key" onclick="pressKey('F2')">F2</div>
+    <div class="key" onclick="pressKey('F3')">F3</div>
+    <div class="key3" onclick="pressKey('F4')">F4</div>
+    <div class="key" onclick="pressKey('F5')">F5</div>
+    <div class="key" onclick="pressKey('F6')">F6</div>
+    <div class="key" onclick="pressKey('F7')">F7</div>
+    <div class="key" onclick="pressKey('F8')">F8</div>
+    <div class="key" onclick="pressKey('F9')">F9</div>
+    <div class="key" onclick="pressKey('F10')">F10</div>
+    <div class="key" onclick="pressKey('F11')">F11</div>
+    <div class="key" onclick="pressKey('F12')">F12</div>
+  </div>
+  <!-- Ligne des chiffres -->
+  <div class="key-row">
+    <div class="key2" onclick="addChar('@')">@</div>
+    <div class="key" onclick="addChar('&')">&amp;</div>
+    <div class="key" onclick="addChar('é')">é</div>
+    <div class="key" onclick="addChar('\"')">"</div>
+    <div class="key" onclick="addChar('\'')">'</div>
+    <div class="key" onclick="addChar('(')">(</div>
+    <div class="key" onclick="addChar('-')">-</div>
+    <div class="key" onclick="addChar('è')">è</div>
+    <div class="key" onclick="addChar('_')">_</div>
+    <div class="key" onclick="addChar('ç')">ç</div>
+    <div class="key" onclick="addChar('à')">à</div>
+    <div class="key" onclick="addChar(')')">)</div>
+    <div class="key" onclick="addChar('=')">=</div>
+    <div class="key wide" onclick="pressKey('Backspace')">Retour Arr.</div>
+  </div>
+  <!-- Ligne des lettres AZERTY -->
+  <div class="key-row">
+    <div class="key wide" onclick="pressKey('Tab')">Tab</div>
+    <div class="key" onclick="addChar('A')">A</div>
+    <div class="key" onclick="addChar('Z')">Z</div>
+    <div class="key" onclick="addChar('E')">E</div>
+    <div class="key" onclick="addChar('R')">R</div>
+    <div class="key" onclick="addChar('T')">T</div>
+    <div class="key" onclick="addChar('Y')">Y</div>
+    <div class="key" onclick="addChar('U')">U</div>
+    <div class="key" onclick="addChar('I')">I</div>
+    <div class="key" onclick="addChar('O')">O</div>
+    <div class="key" onclick="addChar('P')">P</div>
+    <div class="key" onclick="addChar('^')">^</div>
+    <div class="key" onclick="addChar('$')">$</div>
+    <div class="key wide" onclick="pressKey('Enter')">Entrée</div>
+  </div>
+  <!-- Rangée suivante -->
+  <div class="key-row">
+    <div class="key extra-wide" onclick="pressKey('CapsLock')">Verr.Maj</div>
+    <div class="key" onclick="addChar('Q')">Q</div>
+    <div class="key" onclick="addChar('S')">S</div>
+    <div class="key" onclick="addChar('D')">D</div>
+    <div class="key" onclick="addChar('F')">F</div>
+    <div class="key" onclick="addChar('G')">G</div>
+    <div class="key" onclick="addChar('H')">H</div>
+    <div class="key" onclick="addChar('J')">J</div>
+    <div class="key" onclick="addChar('K')">K</div>
+    <div class="key" onclick="addChar('L')">L</div>
+    <div class="key" onclick="addChar('M')">M</div>
+    <div class="key" onclick="addChar('ù')">ù</div>
+    <div class="key" onclick="addChar('*')">*</div>
+  </div>
+  <!-- Rangée suivante -->
+  <div class="key-row">
+    <div class="key wide" onclick="pressKey('Shift')">Shift = MAJ</div>
+    <div class="key" onclick="addChar('<')">&lt;</div>
+    <div class="key" onclick="addChar('W')">W</div>
+    <div class="key" onclick="addChar('X')">X</div>
+    <div class="key" onclick="addChar('C')">C</div>
+    <div class="key" onclick="addChar('V')">V</div>
+    <div class="key" onclick="addChar('B')">B</div>
+    <div class="key" onclick="addChar('N')">N</div>
+    <div class="key" onclick="addChar(',')">,</div>
+    <div class="key" onclick="addChar(';')">;</div>
+    <div class="key" onclick="addChar(':')">:</div>
+    <div class="key" onclick="addChar('!')">!</div>
+    <div class="key wide" onclick="pressKey('Shift')">Shift</div>
+  </div>
+  <!-- Espace et modificateurs -->
+  <div class="key-row">
+    <div class="key wide" onclick="pressKey('Ctrl')">Ctrl</div>
+    <div class="key wide" onclick="pressKey('Meta')">Win</div>
+    <div class="key wide" onclick="pressKey('Alt')">Alt</div>
+    <div class="key extra-wide" onclick="addChar(' ')">Espace</div>
+    <div class="key wide" onclick="addChar('AltGr')">AltGr</div>
+    <div class="key wide" onclick="pressKey('Menu')">Menu</div>
+    <div class="key wide" onclick="pressKey('❤️')">❤️ coeur</div>
+  </div>
+  <!-- Pavé numérique -->
+<div> Pour lire avec Orca, on frappe la touche PLUS du pavé numérique désactivé</div>
+  <div class="key-row" style="margin-top:20px;">
+    <div class="key" onclick="addChar('7')">7</div>
+    <div class="key" onclick="addChar('8')">8</div>
+    <div class="key" onclick="addChar('9')">9</div>
+    <div class="key wide" onclick="pressKey('NumLock')">Verr.num</div>
+  </div>
+  <div class="key-row">
+    <div class="key" onclick="addChar('4')">4</div>
+    <div class="key" onclick="addChar('5')">5</div>
+    <div class="key" onclick="addChar('6')">6</div>
+    <div class="key2 wide" onclick="pressKey('Plus')">Plus</div>
+  </div>
+  <div class="key-row">
+    <div class="key" onclick="addChar('1')">1</div>
+    <div class="key" onclick="addChar('2')">2</div>
+    <div class="key" onclick="addChar('3')">3</div>
+   </div>
+  <div class="key-row">
+    <div class="key" onclick="addChar('0')">0</div>
+    <div class="key" onclick="addChar('.')">.</div>
+    <div class="key wide" onclick="pressKey('Enter')">Entrée du pavé num.</div>
+  </div>
+</div>
+
+<script>
+  const textArea = document.getElementById('textArea');
+  textArea.focus();
+
+  function addChar(char) {
+    const start = textArea.selectionStart;
+    const end = textArea.selectionEnd;
+    const text = textArea.value;
+    textArea.value = text.slice(0, start) + char + text.slice(end);
+    // replacer le curseur juste après le caractère ajouté
+    textArea.selectionStart = textArea.selectionEnd = start + char.length;
+    textArea.focus();
+
+    // vocalisation simple
+    if ('speechSynthesis' in window) {
+      const utterance = new SpeechSynthesisUtterance(char);
+      utterance.lang = 'fr-FR';
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(utterance);
+    }
+  }
+
+  function pressKey(key) {
+    if (key === 'Backspace') {
+      const start = textArea.selectionStart;
+      const end = textArea.selectionEnd;
+      if (start === end && start > 0) {
+        const text = textArea.value;
+        textArea.value = text.slice(0, start - 1) + text.slice(end);
+        textArea.selectionStart = textArea.selectionEnd = start - 1;
+      } else if (start !== end) {
+        const text = textArea.value;
+        textArea.value = text.slice(0, start) + text.slice(end);
+        textArea.selectionStart = textArea.selectionEnd = start;
+      }
+      textArea.focus();
+      return;
+    }
+    if (key === 'Enter') {
+      addChar('\n');
+      return;
+    }
+    if (key === 'Tab') {
+      addChar('\t');
+      return;
+    }
+    if (key === 'CapsLock') {
+      // toggle CapsLock visual not implemented
+      return;
+    }
+    if (key === 'Shift') {
+      // no shift support for now
+      return;
+    }
+    if (key === 'NumLock') {
+      // no NumLock support for now
+      return;
+    }
+    if (key === 'Escape') {
+      // no escape support for now
+      return;
+    }
+    // For other keys like Ctrl, Alt, Meta, Menu, ignore for now
+  }
+</script>
+</body>
+</html>
