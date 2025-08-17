@@ -3,7 +3,7 @@
 # Auteur : association ACIAH, juin 2025
 # Licence : GPL - v3
 # Modifications :
-# Nom : voi_vers_texte
+# Nom : voix_vers_texte
 # DESCRIPTION : je parle et l'ordinateur écrit
 # DEPENDANCES : le script nécessite le paquet xdotool 
 # COMPLEMENTS : 
@@ -13,9 +13,9 @@
 google-chrome-stable "https://www.textfromtospeech.com/fr/voice-to-text/" &
 
 # Attend quelques secondes pour laisser le temps à Chrome de s'ouvrir
-sleep 5
+sleep 2
 
-# Simule le raccourci Alt+d pour sélectionner la barre d'adresse
+# Simule le raccourci Alt+x pour effacer ce qui est écrit, puis Alt+d pour commencer à dicter
 #xdotool search --onlyvisible --class "google-chrome" windowactivate --sync key Alt+d
 xdotool key "Alt+x"
 sleep 0.5
