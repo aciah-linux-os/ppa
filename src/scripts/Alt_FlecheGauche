@@ -1,0 +1,12 @@
+!/bin/bash
+# VERSION 1.0
+# Auteur : association ACIAH
+# Licence : GPL - v3
+# Date : 1 novembre 2025 :
+# Nom : ce raccourci remplace : Alt+FlècheGauche parce que les deux touches Alt et FlecheGauche sont trop distantes pour être utilisées avec une seue main.
+# DESCRIPTION : 
+# DEPENDANCES : le script nécessite le paquet xdotool
+# COMPLEMENTS :  
+# RACCOURCIS : ce script est placé dans le dossier /usr/local/bin et appelé par le raccourci : Alt + c
+sleep 0.5 && xdotool key Alt_L+Left
+exit 0
