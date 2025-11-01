@@ -1,0 +1,13 @@
+# !/bin/bash
+# VERSION 1.0
+# Auteur : association ACIAH
+# Licence : GPL - v3
+# Modifications :
+# Nom : Alt + Origine
+# DESCRIPTION : une seule touche pour aller à la racine de l'arborescence
+# DEPENDANCES : le script nécessite le paquet  xdotool
+# COMPLEMENTS : 
+# RACCOURCIS : ce script est placé dans le dossier /usr/local/bin et appelé par la touche PageUp
+#
+sleep 0.5 && xdotool key Alt+Home
+exit 0
