@@ -22,10 +22,6 @@ On peut régler le clavier pour lancer ce script avec la touche F8.
 # RACCOURCIS : ce script est placé dans le dossier $HOME/.config/caja/scripts
 # et est appelé par le raccourci : F8
 
-# Décommenter les deux lignes suivantes pour récupérer les log du script et les afficher en direct dans un terminal
-#    exec 1>>/var/log/aciah/lireALaVolee.log 2>>/var/log/aciah/lireALaVolee.log
-#    xterm -e "tail -f /var/log/aciah/lireALaVolee.log" &
- 
 #### Arrêt de la synthèse vocale Orca et le script se poursuit
 killall orca &
 sleep 3
@@ -38,7 +34,7 @@ killall -9 speech-dispatcher &
     FILEORIGIN=$1
 # Nom de fichier forcément sans espaces, le double / c'est pour qu'il fasse tous les remplacements, pas juste le premier
     FILENOSPACE=${FILEORIGIN// /-}
-# S'il y'a une différence c'est qu'il y a un ou plusieurs espaces dans le nom du fichier
+# S'il y a une différence c'est qu'il y a un ou plusieurs espaces dans le nom du fichier
     if [ "FILEORIGIN" != "$FILENOSPACE" ]
         then
 # On effectue le renommage en supprimant les espaces par des tirets (-)
