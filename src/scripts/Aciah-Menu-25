@@ -90,7 +90,7 @@ SEPARATOR
 SEPARATOR
 
 item = Ecrire un texte - Traitement de texte. Touche _T.
-cmd = libreoffice --writer
+cmd = libreoffice --writer -norestore
 icon = /usr/share/pixmaps/libreoffice-writer.png
 
 item = Enregistrer un document LibreOffice. Touche _A.
@@ -108,10 +108,6 @@ icon =
 item = Créer une feuille de calculs
 cmd = libreoffice  --calc
 icon = 
-
-item = Agenda
-cmd = libreoffice --calc /home/aciah/.config/outils/agenda.ods
-icon =
 
 SEPARATOR
 SEPARATOR
@@ -177,7 +173,7 @@ item = _Scanner-numériser - et lire. Touche _S
 cmd = xfce4-terminal -T scanner.sh --zoom=2 -e 'bash -c $HOME/.local/scripts//scanner.sh'
 icon = 
 
-item = Eteindre en faisant : WIN + Q . Touche _Q.  
+item = Eteindre en faisant : WIN + Q ou Touche _Q.  
 cmd = sh /usr/local/bin/arret-ordi.sh
 icon = /usr/share/pixmaps/gnome-shutdown3.png
 
@@ -185,18 +181,11 @@ item = I_nversion des couleurs - CTRL + WIN + ALT + I
 cmd = xcalib -i -a
 icon = /usr/share/pixmaps/invert_color.png
 
-item = Lecture intelligence artificielle. Touche _P
-cmd = sh /usr/local/bin/alt+p.sh
-icon=
-
-item = Lecture intelligence artificielle. Touche _z
-cmd = sh /usr/local/bin/ai.sh
-icon=
-
-
-item = Menu _Whisker pour trouver tous les programmes ou WIN + L
+item = Menu _Whisker pour trouver tous les programmes, Touche _M.
 cmd = x-terminal-emulator -e xfce4-popup-whiskermenu
 icon = /usr/share/pixmaps/xfce4-whiskermenu.png
 
-	
+item = Terminal, lancer un TermiNal , Touche _N .
+cmd = x-terminal-emulator
+icon =
 	
