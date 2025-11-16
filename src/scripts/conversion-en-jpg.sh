@@ -1,19 +1,17 @@
 #!/bin/sh
 
 # VERSION :     1.0
-# AUTHOR:	(c) Christophe L pour ACIAH
+# AUTHOR:	(c) Christophe L et ACIAH - novembre 2025
 # DESCRIPTION:	Script pour convertir des fichiers PDF en fichiers JPG avec une résolution de 300 dpi
 
-# Tous les fichiers IMAGE (par ex. bmp, jpg, png) et TXT ainsi que les fichiers PDF sont convertis en fichiers JPG individuels, 
-# tandis que certains fichiers document (par ex. doc, odt) sont convertis en fichiers PDF individuels 
-# et enregistrés dans un sous-dossier nommé "_dirname".
-# Requires "imagemagick" package which includes "convert"
+# Tous les fichiers pdf sont convertis en fichiers jpg individuels
+# Requires "pdftoppm" package.
 # 
 #
 OLDIFS=$IFS
 IFS="
 "
 for filename in $@; do
-convert -density 300 "$filename" "${filename%\.*}.jpg"
+pdftoppm -jpeg -r 300 "$filename" "${filename%\.*}_page"
 done
 IFS=$OLDIFS
