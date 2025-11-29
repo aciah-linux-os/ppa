@@ -1,5 +1,5 @@
 # !/bin/bash
-# script pour faire : Alt + Origine, en lui affectant une seule touche du clavier
+# script faisant : Alt + Origine, en lui affectant une seule touche du clavier
 # nécessite le paquet : xdotool
 # licence GPL v3
 # auteur : association Aciah - avril 2024
