@@ -1,0 +1,137 @@
+#!/bin/bash
+# VERSION 2.2
+# AUTHOR  Jean-Yves ROCHER
+# Licence : GPL V3
+# Modifications : association ACIAH et Pierre Estrem avril 2024, 
+# et Gérard Ruau (membre association ACIAH) 13/05/2024
+
+# NAME : Lire et obtenir le texte
+# DESCRIPTION : Script permettant la lecture en direct de fichiers images jpg, png, tif, pdf, doc, docx, txt.
+# Dépendances : espeak, unoconv, pandoc, player.py, conv-txt.sh, tesseract, pdftoppm, antiword
+# ATTENTION : unoconv est déprécié et sera supprimé dans Python 3.12, nous avons remplacé par antiword
+# RACCOURCIS : placer ce script dans $HOME/.config/caja/scripts et l'appeler par F8
+
+killall orca &>/dev/null
+sleep 3
+killall -9 speech-dispatcher &>/dev/null
+
+#### Gestion des fichiers avec ou sans espaces ####
+
+FILEORIGIN="$1"
+FILENOSPACE="${FILEORIGIN// /-}"
+
+if [[ "$FILEORIGIN" != "$FILENOSPACE" ]]; then
+    # On renomme le fichier si nécessaire
+    mv -- "$FILEORIGIN" "$FILENOSPACE"
+    FILEORIGIN="$FILENOSPACE"
+fi
+
+#### Attribution des différentes variables utilisées dans ce script
+FICHIER="$(basename "$FILEORIGIN")"
+FILE="${FICHIER%.*}"
+CHEMIN="$(dirname "$FILEORIGIN")"
+REPLECTURE="$HOME/Machine-a-lire"
+TYPE="$(mimetype -i -b "$FILEORIGIN" 2>/dev/null)"
+
+#### Création du dossier Machine-a-lire si besoin
+if [ ! -d "$REPLECTURE" ]; then
+    mkdir -p "$REPLECTURE"
+fi
+
+aplay /usr/local/share/advl/beep.wav &>/dev/null
+
+#### Détermination de l'extension du fichier
+EXTENSION="${FICHIER##*.}"
+EXTENSION="${EXTENSION,,}" # minuscule
+
+#### Extraction, conversion et lecture selon l'extension
+if [ -n "$EXTENSION" ]; then
+    case "$EXTENSION" in
+
+        odt)
+            espeak -a 200 -v mb-fr1 -s 130 "patientez"
+            mkdir -p "$REPLECTURE/$FILE"
+            pandoc -s "$CHEMIN/$FICHIER" -t plain -o "$REPLECTURE/$FILE/${FILE}.txt" &&
+            cp "$REPLECTURE/$FILE/${FILE}.txt" "$CHEMIN/${FILE}.txt" &&
+            x-terminal-emulator -e /usr/local/bin/player.py "$REPLECTURE/$FILE/${FILE}.txt" &&
+            espeak -a 200 -v mb-fr1 -s 130 "lecture terminée"
+            rm -rf "$REPLECTURE/$FILE"
+        ;;
+
+	html)
+    		espeak -a 200 -v mb-fr1 -s 130 "patientez"
+   		 mkdir -p "$REPLECTURE/$FILE"
+    		pandoc -s "$CHEMIN/$FICHIER" -t plain -o "$REPLECTURE/$FILE/${FILE}.txt" &&
+    		cp "$REPLECTURE/$FILE/${FILE}.txt" "$CHEMIN/${FILE}.txt" &&
+    		x-terminal-emulator -e /usr/local/bin/player.py "$REPLECTURE/$FILE/${FILE}.txt" &&
+    		espeak -a 200 -v mb-fr1 -s 130 "lecture terminée"
+    		rm -rf "$REPLECTURE/$FILE"
+	;;
+
+        pdf)
+            espeak -a 200 -v mb-fr1 -s 130 "patientez"
+            mkdir -p "$REPLECTURE/$FILE"
+            pdftoppm -r 200 -tiff "$CHEMIN/$FICHIER" "$REPLECTURE/$FILE/${FILE}_page" &&
+            espeak -a 200 -v mb-fr1 -s 130 "patientez, cela peut durer plusieurs minutes"
+            for PAGE in "$REPLECTURE/$FILE/"*.tif; do
+            tesseract --tessdata-dir /usr/share/tesseract-ocr/4.00/tessdata/ "$PAGE" "${PAGE%.*}" -l fra
+            done
+            espeak -a 200 -v mb-fr1 -s 130 "patientez"
+            cat "$REPLECTURE/$FILE/${FILE}_page"*.txt > "$REPLECTURE/$FILE/${FILE}.txt"
+            cp "$REPLECTURE/$FILE/${FILE}.txt" "$CHEMIN/${FILE}.txt"
+            x-terminal-emulator -e /usr/local/bin/player.py "$REPLECTURE/$FILE/${FILE}.txt" &&
+            espeak -a 200 -v mb-fr1 -s 130 "lecture terminée"
+            rm -rf "$REPLECTURE/$FILE"
+        ;;
+
+        docx)
+            espeak -a 200 -v mb-fr1 -s 130 "patientez"
+            mkdir -p "$REPLECTURE/$FILE"
+            pandoc "$CHEMIN/$FICHIER" -o "$REPLECTURE/$FILE/${FILE}.txt" &&
+            cp "$REPLECTURE/$FILE/${FILE}.txt" "$CHEMIN/${FILE}.txt" &&
+            x-terminal-emulator -e /usr/local/bin/player.py "$REPLECTURE/$FILE/${FILE}.txt" &&
+            espeak -a 200 -v mb-fr1 -s 130 "lecture terminée"
+            rm -rf "$REPLECTURE/$FILE"
+        ;;
+
+        doc)
+			espeak -a 200 -v mb-fr1 -s 130 "patientez"
+			mkdir -p "$REPLECTURE/$FILE"
+			antiword -t "$CHEMIN/$FICHIER" > "$REPLECTURE/$FILE/${FILE}.txt" &&
+			cp "$REPLECTURE/$FILE/${FILE}.txt" "$CHEMIN/${FILE}.txt" &&
+			x-terminal-emulator -e /usr/local/bin/player.py "$REPLECTURE/$FILE/${FILE}.txt" &&
+			espeak -a 200 -v mb-fr1 -s 130 "lecture terminée"
+			rm -rf "$REPLECTURE/$FILE"
+        ;;
+
+        txt)
+            espeak -a 200 -v mb-fr1 -s 130 "patientez"
+            cp "$FILEORIGIN" "$REPLECTURE/${FILE}.txt"
+            x-terminal-emulator -e /usr/local/bin/player.py "$REPLECTURE/${FILE}.txt" &&
+            espeak -a 200 -v mb-fr1 -s 130 "lecture terminée"
+            rm -f "$REPLECTURE/${FILE}.txt"
+        ;;
+
+        png|jpg|jpeg|tif|tiff)
+            espeak -a 200 -v mb-fr1 -s 130 "patientez"
+            mkdir -p "$REPLECTURE/$FILE"
+            tesseract --tessdata-dir /usr/share/tesseract-ocr/4.00/tessdata/ "$CHEMIN/$FICHIER" "$REPLECTURE/$FILE/$FILE" -l fra &&
+            cp "$REPLECTURE/$FILE/$FILE.txt" "$CHEMIN/$FILE.txt" &&
+            x-terminal-emulator -e /usr/local/bin/player.py "$REPLECTURE/$FILE/$FILE.txt" &&
+            espeak -a 200 -v mb-fr1 -s 130 "lecture terminée"
+            rm -rf "$REPLECTURE/$FILE"
+        ;;
+
+        *)
+            espeak -a 200 -v mb-fr1 -s 130 "Format non supporté"
+        ;;
+    esac
+fi
+
+rm -rf "$REPLECTURE"
+
+#### Ré-active la synthèse vocale Orca
+speech-dispatcher &>/dev/null
+orca --replace &
+
+exit 0
