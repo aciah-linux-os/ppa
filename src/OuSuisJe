@@ -1,0 +1,26 @@
+#!/bin/bash
+# VERSION 1.0
+# Auteur : association ACIAH
+# Licence : GPL - v3
+# Modifications :
+# Nom : ou_suis_je
+# DESCRIPTION : la touche Pause pour répondre à la question : où suis-je, et naviguer vers une autre application
+# DEPENDANCES : le script nécessite le paquet xdotool
+# COMPLEMENTS :  
+# RACCOURCIS : ce script est placé dans le dossier /usr/local/bin
+
+# Récupérer le nom de la fenêtre active
+app_name=$(xdotool getactivewindow getwindowname)
+
+# Annoncer avec espeak
+# -v fr : voix française, modifie si besoin (par ex. fr+f3, fr+male1…)
+# 2>/dev/null pour éviter les messages dans le terminal
+espeak -a 200 -v mb-fr1 -s 150 "oues êtes ici : : $app_name" 2>/dev/null
+
+# Lancer Alt+Tab « prolongé »
+xdotool keydown alt
+sleep 0.1
+xdotool key Tab
+sleep 15
+xdotool keyup alt
+exit 0
