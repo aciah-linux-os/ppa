@@ -1,0 +1,14 @@
+#!/bin/bash
+# VERSION 1.0
+# Auteur : association ACIAH
+# Licence : GPL - v3
+# Date : 1 novembre 2025 :
+# Nom : RetourArriere.h
+# DESCRIPTION : ce raccourci remplace : Alt+FlècheGauche, 
+# il permet de créer le raccourci : Alt + C , plus facile pour les personnes n'ayant plus qu'une main.
+# DEPENDANCES : le script nécessite le paquet xdotool
+# COMPLEMENTS :  
+# RACCOURCIS : ce script est placé dans le dossier /usr/local/bin et appelé par le raccourci : Alt + c
+# 
+sleep 0.5 && xdotool key Alt_L+Left
+exit 0
