@@ -1,0 +1,91 @@
+#!/usr/bin/env bash
+# VERSION 1.0
+# Auteur : Mickaël et association ACIAH
+# Licence : GPL - v3
+# Date : 15 août 2026 :
+# Nom : parle
+# DESCRIPTION : 
+# DEPENDANCES : le script nécessite l'existence du script orca-customisations.py
+# COMPLEMENTS :  
+# RACCOURCIS : ce script est placé dans le dossier /usr/bin et appelé par le raccourci : Alt + W
+
+set -u
+
+SCRIPT_PY="/home/aciah/.local/share/orca/orca-customizations.py"
+
+usage() {
+    cat >&2 <<'EOF'
+Usage:
+  parle -t "texte à lire" [-l LANG] [-r VITESSE]
+  parle -f fichier.txt [-l LANG] [-r VITESSE]
+  cat fichier.txt | parle -s [-l LANG] [-r VITESSE]
+  parle < fichier.txt [-l LANG] [-r VITESSE]
+Options:
+  -t TEXTE   Texte direct.
+  -f FICHIER Lire un fichier.
+  -s         Lire depuis stdin.
+  -l LANG    Langue, défaut fr_FR.
+  -r VITESSE Vitesse, défaut -30.
+  -h         Aide.
+EOF
+    exit 1
+}
+
+texte=""
+mode=""
+lang="fr_FR"
+rate="-30"
+
+while getopts ":t:f:sl:r:h" opt; do
+    case "$opt" in
+        t) texte="$OPTARG"; mode="text" ;;
+        f)
+            [ -f "$OPTARG" ] || { echo "Erreur : fichier introuvable : $OPTARG" >&2; exit 1; }
+            texte="$(cat "$OPTARG")"
+            mode="file"
+            ;;
+        s) texte="$(cat)"; mode="stdin" ;;
+        l) lang="$OPTARG" ;;
+        r) rate="$OPTARG" ;;
+        h) usage ;;
+        :) echo "Erreur : l'option -$OPTARG nécessite un argument." >&2; usage ;;
+        \?) echo "Erreur : option invalide -$OPTARG" >&2; usage ;;
+    esac
+done
+
+shift "$((OPTIND - 1))"
+if [ -z "$mode" ]; then
+    if [ $# -eq 1 ] && [ -f "$1" ]; then
+        texte="$(cat "$1")"
+    elif [ $# -gt 0 ]; then
+        texte="$*"
+    elif [ ! -t 0 ]; then
+        texte="$(cat)"
+    else
+        # Mode interactif : pas d’argument, stdin = terminal
+        cat >&2 <<'EOF'
+Quatre possibilités d'utilisation :
+  parle "texte à lire"
+  parle -f fichier.txt
+  cat fichier.txt | parle
+  parle < fichier.txt
+
+Tapez 'parle' suivi de votre "texte" entre guillemets.
+EOF
+    fi
+fi
+
+# Si on a du texte, on lance la synthèse vocale
+if [ -n "${texte:-}" ] && [ -n "${texte//[[:space:]]/}" ]; then
+    python3 "$SCRIPT_PY" "$lang" "$rate" "$texte"
+fi
+
+# Fichier RC temporaire pour pré-remplir la ligne avec 'parle'
+TMP_RC=$(mktemp)
+cat > "$TMP_RC" <<'EOF'
+READLINE_LINE="parle"
+READLINE_POINT=${#READLINE_LINE}
+EOF
+
+# Bash interactif avec ligne pré-remplie
+exec bash --init-file "$TMP_RC"
