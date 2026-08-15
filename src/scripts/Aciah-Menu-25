@@ -17,107 +17,122 @@
 #
 # "SEPARATOR" -> Ajoute une ligne de séparation entre 2 items
 #
+# "submenu=" - > Définit un sous-menu. Celui-ci doit être suivi d'une ligne dite indentée
+# (ce qui veut dire décalée vers la droite en utilisant la Touche TAB) avec le mot clé "icon". Toutes les entrées
+# (item) du sous-menu doivent être sur une ligne indentée.
+#
 # "iconsize=" -> Définit la taille des icônes (pour toutes les icônes...)
 #
 #      ............... Début du menu simplifié ...............
 
-MenuPosition = 40 1 # Optional
+MenuPosition = 60 100 # Optional
 
-iconsize = 10
+fontsize = 11 # Optional
 
-item = Aciah-Menu-simple
+iconsize = 20
+
+
+item = Aciah-Menu
 cmd = " "
 icon =
 
-item = E_xplications. Touche x .
-cmd = firefox /usr/local/share/advl/explications.html
+item = Explications. Touche _X
+cmd = /usr/local/bin/player.py /usr/local/share/advl/explications.txt
 icon =
 
 SEPARATOR
 SEPARATOR
 SEPARATOR
 
-item = _Lire mes messages, touche _L 
+item = Lire mes messages. Touche _L
 cmd = thunderbird
 icon = /usr/share/pixmaps/evolution.png
 
-item = Enregistrer les pièces jointes de la messagerie.Touche _J.
+item = Enregistrer les pièces jointes. Touche _J
 cmd = sh /usr/local/bin/pjointes.sh
 icon =
 
-item = _Ecrire un courriel, un mail, touche _E 
+item = Ecrire un courriel, un mail. Touche _E
 cmd = thunderbird mailto:
-icon = 
+icon =
 
 item = Annuaires
 cmd = firefox https:/aciah-linux.org/annuaires.html
-icon = 
+icon =
 
 SEPARATOR
 SEPARATOR
 SEPARATOR
 
-item = Internet, touche _i
+item = Internet. Touche _i
 cmd = firefox
 icon = /usr/share/pixmaps/webbrowser-app.png
 
-item = Le Localisateur. Touche _U.
+item = Le localisateur. Touche _U
 cmd = firefox http://localisateur.org
-icon = 
+icon =
 
-item = Petite loupe non cliquable - ou CTRL + Espace
+item = Dicter un texte. Touche _D
+cmd = /usr/local/bin/lancer_voix_vers_texte.sh 
+icon =
+
+item = Petite loupe non cliquable ou CTRL + Espace
 cmd = vmg
 icon = 
+
+item = lire un document txt. Touche $
+cmd = x-terminal-emulator -e parle
+icon =
 
 SEPARATOR
 SEPARATOR
 SEPARATOR
 
 item = Dossier personnel, catalogue. Touche _C.
-cmd = caja
-icon = /usr/share/pixmaps/file_home.png
+cmd = sh -c 'caja "$HOME"'
+icon = /usr/share/pixmaps/cab.png
 
 item = Appareils branchés
-cmd = caja /media/
-icon = 
+cmd = sh -c 'caja "/media/$USER"'
+icon =
 
 item = Corbeille
 cmd = caja trash:///
-icon = 
+icon =
 
 SEPARATOR
 SEPARATOR
 SEPARATOR
 
-item = Ecrire un texte - Traitement de texte. Touche _T.
-cmd = libreoffice --writer -norestore
+item = Creer un texte dans un dossier. Touche _T
+cmd = /usr/local/bin/dem_writer.py
 icon = /usr/share/pixmaps/libreoffice-writer.png
 
-item = Enregistrer un document LibreOffice. Touche _A.
+item = Traitement de texte. Touche _Y
+cmd = libreoffice26.2 --writer -norestore
+icon = 
+
+
+item = Enregistrer sous. Touche _A
 cmd = sh /usr/local/bin/save.sh
 icon =
 
-item = Dicter un texte. Touche _D.
-cmd = google-chrome https://www.textfromtospeech.com/fr/voice-to-text/
-icon = 
 
-item = Editeur de texte mousepad. Touche _*
+item = Editeur de texte mousepad
 cmd = mousepad
-icon = 
+icon =
 
-item = Créer une feuille de calculs
-cmd = libreoffice  --calc
-icon = 
+item = Creer une feuille de calculs
+cmd = libreoffice26.2 --calc
+icon =
 
 SEPARATOR
 SEPARATOR
 SEPARATOR
 
-
-item = Eole, connexion
+item = Eole, connexion. 
 cmd = firefox http://eole.avh.asso.fr/user/login?destination=/
-icon = 
-
+icon = /usr/share/pixmaps/lire.png
 
 item = Eole, recherche par titre ou auteur
 cmd = firefox http://eole.avh.asso.fr/moteur-de-recherche/audio/advanced
@@ -133,59 +148,77 @@ icon =
 
 SEPARATOR
 SEPARATOR
+SEPARATOR
 
-
-item = Activer/Désactiver le lecteur d'écran _ORCA. Touche _O.
-cmd = sh /home/aciah/.config/orca/scripts/orca-switch.sh
+item = Activer/Désactiver le lecteur d'écran ORCA. Touche _O
+cmd = sh -c 'sh "$HOME/.config/orca/scripts/orca-switch.sh"'
 icon = /usr/share/pixmaps/orca.png
 
-item = _Réparer le lecteur d'écran ORCA. Touche _R.
-cmd = sh /home/aciah/.config/orca/scripts/restaurer-orca.sh
-icon = /usr/share/pixmaps/orca.png
-
-item = Mode focus - mode navigation - Touche _F
-cmd = sh /usr/local/bin/insert+a.sh
-icon =
+item = Réparer le lecteur d'écran ORCA. Touche _R
+cmd = sh -c 'sh "$HOME/.config/orca/scripts/restaurer-orca.sh"'
+icon = 
 
 SEPARATOR
 SEPARATOR
 SEPARATOR
 
+item = Pulse-Audio , couper et remettre le volume. Touche _V
+cmd = x-terminal-emulator -e amixer -q -D pulse sset Master toggle
+icon = /usr/share/pixmaps/son.jpg
 
-item = Alsamixer, modifier le volume. Touche _V.
-cmd = x-terminal-emulator -e amixer -q  -D pulse sset Master toggle
+item = Pulse-Audio , augmenter le volume de 10%. Touche _H
+cmd = x-terminal-emulator -e amixer -q -D pulse sset Master 10%+
 icon = 
 
-item = Pulse-Audio, le volume PLUS HAUT de 10%. Touche _H
-cmd = sh /usr/local/bin/volumeH.sh
+item = Pulse-Audio , diminuer le volume de 10%. Touche _B
+cmd = x-terminal-emulator -e amixer -q -D pulse sset Master 10%-
 icon = 
 
-item = Pulse-Audio, le volume PLUS BAS de 5%. Touche _B
-cmd = sh /usr/local/bin/volumeB.sh
-icon = 
 
-item = Se connecter en Wifi. Touche _W.
+SEPARATOR
+SEPARATOR
+SEPARATOR
+
+item = Se connecter en Wifi. Touche _W
 cmd = x-terminal-emulator -e /usr/local/bin/wifi-ch.sh
 icon = /usr/share/pixmaps/webbrowser-app.png
 
+SEPARATOR
+SEPARATOR
+SEPARATOR
 
-item = _Scanner-numériser - et lire. Touche _S
-cmd = xfce4-terminal -T scanner.sh --zoom=2 -e 'bash -c $HOME/.local/scripts//scanner.sh'
-icon = 
+item = Scanner-numériser. Frappez la touche _S et patientez.
+#cmd = xfce4-terminal -T scanner.sh --zoom=2 -e 'bash -c $HOME/.local/scripts/scanner.sh'
+#cmd = x-terminal-emulator -e 'bash /home/aciah/.local/scripts/scanner-avec-snaps2.sh'
+cmd = x-terminal-emulator -e /usr/local/bin/scanner-naps2.sh
+icon =
 
-item = Eteindre en faisant : WIN + Q ou Touche _Q.  
-cmd = sh /usr/local/bin/arret-ordi.sh
+SEPARATOR
+SEPARATOR
+SEPARATOR
+
+item = Eteindre en faisant : WIN + Q   ou Touche _Q
+cmd = sh /usr/local/bin/arret.sh
 icon = /usr/share/pixmaps/gnome-shutdown3.png
 
-item = I_nversion des couleurs - CTRL + WIN + ALT + I
+item = Inversion des couleurs - CTRL + WIN + ALT + I
 cmd = xcalib -i -a
 icon = /usr/share/pixmaps/invert_color.png
 
-item = Menu _Whisker pour trouver tous les programmes, Touche _M.
+
+item = Menu Whisker pour trouver tous les programmes, touche _M
 cmd = x-terminal-emulator -e xfce4-popup-whiskermenu
 icon = /usr/share/pixmaps/xfce4-whiskermenu.png
 
-item = Terminal, lancer un TermiNal , Touche _N .
+item = Terminal, ouvrir un TermiNal, touche _N
 cmd = x-terminal-emulator
-icon =
-	
+icon = 
+
+item = Niveau batterie, touche _Z
+cmd = x-terminal-emulator -e /usr/local/bin/niveau-batterie.sh
+icon = 
+
+item = Où suis-je ? . Touche _!
+cmd = /usr/local/bin/OusuisJe.sh
+icon = 
+
