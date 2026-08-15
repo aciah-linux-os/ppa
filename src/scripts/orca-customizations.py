@@ -1,5 +1,14 @@
 #!/usr/bin/env python3
 # ce script est utilisé pour l'outil : parle
+# VERSION 1.0
+# Auteur : Mickaël et association ACIAH
+# Licence : GPL - v3
+# Date : 15 aout 2026 :
+# DESCRIPTION : 
+# DEPENDANCES : le script nécessite le paquet python3
+# COMPLEMENTS :  
+# RACCOURCIS : ce script est placé dans le dossier /home/USER/.local/share/orca
+
 import sys
 import subprocess
 
