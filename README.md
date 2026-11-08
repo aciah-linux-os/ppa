@@ -2,7 +2,7 @@
 
 
 ## Installation
-le fichier iso permettant l'installation de Aciah-Linux, verson ddu 30 juillet 2026, est ici :
+le fichier iso permettant l'installation de Aciah-Linux, version du 30 juillet 2026, est ici :
 https://aciah.xyz/iso
 
 Des explications sont ici : https://aciah.xyz/iso/infos
